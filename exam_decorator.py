@@ -1,6 +1,6 @@
 import functools
 import logging
-from unittest.mock import patch
+from unittest.mock import patch, call
 import pytest
 import time
 
@@ -27,7 +27,11 @@ def test_function_result(resp, exp):
 def test_debug_argument(resp, exp, patcher):
     with patcher as mo:
         timeit(resp)(incr)(5)
-        #mo.assert_has_calls([mo(f'{exp} started'), mo(f'{exp} finished')], any_order=True)
+        calls = [
+            call(f'{exp} started'),
+            call(f'{exp} finished')
+        ]
+        mo.assert_has_calls(calls, any_order=True)
 
 
 def timeit(prefix: str = None) -> int:
